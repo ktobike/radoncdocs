@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RadOncDocs</title>
+<meta name="description" content="Source-cited policy search and research summarization demo." />
+<link rel="icon" type="image/png" href="/ui/assets/mcbeth-lab-mark.png" />
+<style>
+:root {
+  --navy-950:#0b1425;
+  --navy-900:#101c31;
+  --navy-800:#192941;
+  --navy-700:#263a58;
+  --wine-700:#73323c;
+  --wine-600:#8b3d48;
+  --wine-500:#a85561;
+  --wine-100:#f6e9eb;
+  --wine-50:#fbf5f6;
+  --violet-100:#ebe9f3;
+  --violet-50:#f7f6fb;
+  --ink:#1d2433;
+  --ink-2:#374151;
+  --muted:#667085;
+  --muted-2:#98a2b3;
+  --line:#dfe3ea;
+  --line-strong:#ccd3de;
+  --canvas:#f3f5f8;
+  --paper:#ffffff;
+  --paper-2:#fafbfc;
+  --green:#16794d;
+  --green-bg:#eaf7f0;
+  --amber:#9a5b13;
+  --amber-bg:#fff6e8;
+  --shadow:0 1px 2px rgba(15,23,42,.05), 0 8px 28px rgba(15,23,42,.05);
+  --shadow-lg:0 18px 50px rgba(15,23,42,.16);
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{
+  background:var(--canvas);color:var(--ink);
+  font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,textarea,select{font:inherit}
+button{color:inherit}
+a{color:inherit}
+.hidden{display:none!important}
+.app{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr)}
+.sidebar{
+  position:sticky;top:0;height:100vh;padding:18px 14px 16px;color:#fff;
+  background:
+    radial-gradient(circle at 0 0, rgba(168,85,97,.18), transparent 31%),
+    linear-gradient(180deg,var(--navy-950),var(--navy-900));
+  display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.05);
+}
+.brand{padding:7px 7px 24px;display:flex;gap:12px;align-items:center}
+.brand-logo{
+  width:48px;height:48px;display:grid;place-items:center;flex:0 0 auto;
+  border-radius:14px;background:#fff;padding:4px;box-shadow:0 0 0 1px rgba(255,255,255,.10),0 8px 22px rgba(0,0,0,.18)
+}
+.brand-logo img{width:100%;height:100%;object-fit:contain}
+.brand-name{font-size:16px;font-weight:760;letter-spacing:-.015em}
+.brand-lab{font-size:10.5px;color:#b5bfd0;margin-top:2px;letter-spacing:.01em}
+.nav-caption{color:#74829a;font-size:9px;font-weight:800;letter-spacing:.105em;text-transform:uppercase;padding:8px 10px 7px}
+.nav{display:grid;gap:4px}
+.nav-btn{
+  width:100%;border:0;background:transparent;color:#bac5d5;cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:9px;font-size:13.5px;font-weight:620;
+  transition:background .14s,color .14s,transform .14s
+}
+.nav-btn:hover{background:rgba(255,255,255,.055);color:#fff}
+.nav-btn.active{background:linear-gradient(90deg,rgba(168,85,97,.25),rgba(255,255,255,.06));color:#fff;box-shadow:inset 3px 0 0 var(--wine-500)}
+.nav-btn svg{width:18px;height:18px;flex:0 0 auto}
+.sidebar-spacer{flex:1}
+.sidebar-card{margin:12px 4px 0;padding:13px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:11px}
+.index-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#d5dcea}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#667085}
+.status-dot.ready{background:#3bd18b;box-shadow:0 0 0 3px rgba(59,209,139,.12)}
+.sidebar-meta{font-size:10px;color:#74829a;margin:7px 0 0 15px;line-height:1.5}
+.shell{min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:30;height:66px;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px
+}
+.top-title-wrap{display:flex;align-items:center;gap:10px;min-width:0}
+.topbar-title{font-size:13.5px;font-weight:720;color:var(--navy-900)}
+.topbar-path{color:var(--muted-2);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-actions{display:flex;align-items:center;gap:9px}
+.workspace-chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:10.5px;color:var(--muted)}
+.workspace-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--wine-500)}
+.content{max-width:1320px;margin:0 auto;padding:30px 30px 58px}
+.view{display:none}.view.active{display:block}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:20px}
+.page-eyebrow{font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:820;color:var(--wine-600);margin-bottom:7px}
+.page-title{margin:0;font-size:25px;line-height:1.2;letter-spacing:-.026em;font-weight:760;color:var(--navy-900)}
+.page-subtitle{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.55;max-width:720px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.btn{
+  border:1px solid var(--line-strong);background:#fff;min-height:38px;border-radius:8px;padding:0 13px;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:720;cursor:pointer;transition:.14s
+}
+.btn:hover{background:#f8f9fb;border-color:#bfc7d4}.btn:disabled{opacity:.52;cursor:not-allowed}
+.btn.primary{background:var(--wine-600);border-color:var(--wine-600);color:#fff;box-shadow:0 3px 10px rgba(139,61,72,.18)}
+.btn.primary:hover{background:var(--wine-700);border-color:var(--wine-700)}
+.btn.navy{background:var(--navy-900);border-color:var(--navy-900);color:#fff}
+.btn.navy:hover{background:var(--navy-800)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted);box-shadow:none}
+.btn svg{width:15px;height:15px}
+.icon-btn{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.icon-btn:hover{background:var(--paper-2);color:var(--ink)}
+.icon-btn svg{width:15px;height:15px}
+/* overview */
+.overview-hero{
+  overflow:hidden;position:relative;padding:28px 30px 26px;min-height:210px;color:#fff;border:0;
+  background:
+    radial-gradient(circle at 88% 18%,rgba(255,255,255,.17) 0 2px,transparent 3px),
+    radial-gradient(circle at 93% 28%,rgba(255,255,255,.12) 0 3px,transparent 4px),
+    radial-gradient(circle at 84% 36%,rgba(255,255,255,.10) 0 2px,transparent 3px),
+    linear-gradient(118deg,var(--navy-900) 0%,#1d2d4b 58%,#64323d 130%);
+  box-shadow:0 14px 38px rgba(16,28,49,.14)
+}
+.overview-hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid rgba(255,255,255,.07);border-radius:50%;right:-52px;top:-78px;box-shadow:0 0 0 36px rgba(255,255,255,.025),0 0 0 72px rgba(255,255,255,.018)}
+.hero-copy{position:relative;z-index:2;max-width:720px}
+.hero-kicker{color:#d9b9be;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.hero-title{font-size:29px;font-weight:760;letter-spacing:-.035em;margin:0 0 8px;line-height:1.18}
+.hero-sub{font-size:12.5px;line-height:1.6;color:#c7d1df;max-width:630px}
+.hero-search{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;max-width:760px;margin-top:21px}
+.hero-search input{height:45px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.095);color:#fff;border-radius:9px;padding:0 14px;outline:0;box-shadow:inset 0 1px 1px rgba(0,0,0,.06)}
+.hero-search input::placeholder{color:#aeb9c9}.hero-search input:focus{border-color:#d9b9be;box-shadow:0 0 0 3px rgba(168,85,97,.14)}
+.hero-search .btn{min-height:45px;padding-inline:18px;background:#fff;color:var(--navy-900);border-color:#fff}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.metric{padding:15px 16px;display:flex;align-items:center;gap:12px}
+.metric-icon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:var(--wine-50);color:var(--wine-600);border:1px solid #f1dadd}
+.metric-icon svg{width:17px;height:17px}.metric-value{font-size:18px;font-weight:780;color:var(--navy-900);line-height:1}.metric-label{font-size:10px;color:var(--muted);margin-top:5px}
+.overview-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:16px;margin-top:16px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 17px;border-bottom:1px solid var(--line)}
+.panel-head h3{margin:0;font-size:12.5px;color:var(--navy-900)}
+.text-link{border:0;background:transparent;color:var(--wine-600);font-size:10.5px;font-weight:750;cursor:pointer;padding:3px}
+.recent-docs{display:grid}
+.recent-doc{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 17px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+.recent-doc:last-child{border-bottom:0}.recent-doc:hover{background:#fcfbfb}
+.doc-icon{width:34px;height:38px;border-radius:7px;border:1px solid var(--line);background:var(--paper-2);display:grid;place-items:center;color:var(--wine-600)}
+.doc-icon.journal{color:#495d84;background:#f4f5fa}.doc-icon svg{width:17px;height:17px}
+.recent-title{font-size:11.5px;font-weight:690;color:#2b3445;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recent-meta{font-size:9.5px;color:var(--muted-2);margin-top:4px}.recent-date{font-size:9.5px;color:var(--muted);white-space:nowrap}
+.quick-list{padding:7px 10px 10px}
+.quick-query{width:100%;border:0;background:transparent;text-align:left;padding:10px 9px;border-radius:8px;cursor:pointer;display:flex;align-items:flex-start;gap:9px;color:#3f4a5c}
+.quick-query:hover{background:var(--wine-50)}
+.quick-query svg{width:15px;height:15px;color:var(--wine-600);flex:0 0 auto;margin-top:1px}.quick-query span{font-size:10.8px;line-height:1.45}
+/* Search */
+.search-shell{padding:17px}
+.search-box{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch}
+.search-input-wrap{border:1px solid var(--line-strong);border-radius:9px;background:#fff;padding:9px 11px;transition:.14s}
+.search-input-wrap:focus-within{border-color:#c58b93;box-shadow:0 0 0 3px rgba(139,61,72,.07)}
+.search-input-wrap label{display:block;color:var(--muted);font-size:9px;font-weight:780;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.search-input{width:100%;min-height:46px;max-height:130px;resize:vertical;border:0;outline:0;padding:0;background:transparent;color:var(--ink);line-height:1.45;font-size:13.5px}
+.search-input::placeholder{color:#a6afbd}.search-btn{min-width:112px}
+.suggestions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+.suggestions-label{font-size:9.5px;color:var(--muted-2)}
+.suggestion{border:1px solid #ead9dc;background:var(--wine-50);color:#6e3941;border-radius:999px;padding:5px 9px;font-size:9.5px;cursor:pointer}
+.suggestion:hover{background:#f3e4e7}
+.settings{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.settings summary{font-size:10px;color:var(--muted);cursor:pointer;width:fit-content}.settings-grid{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}.field{display:grid;gap:4px}.field label{font-size:9px;color:var(--muted)}.field input[type=number]{height:32px;border:1px solid var(--line);border-radius:6px;padding:0 8px;width:85px}.checkbox{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted)}.checkbox input{accent-color:var(--wine-600)}
+.alert{display:none;margin-top:10px;padding:9px 11px;border:1px solid #f1c6cb;background:#fff5f6;color:#8a2c39;border-radius:7px;font-size:10.5px}.alert.show{display:block}
+.answer-grid{display:grid;grid-template-columns:minmax(0,1fr) 355px;gap:16px;margin-top:16px;align-items:start}
+.answer-card{padding:22px;min-height:260px}
+.answer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:17px}.answer-label{font-size:9px;font-weight:820;letter-spacing:.1em;text-transform:uppercase;color:var(--wine-600)}.answer-title{font-size:17px;font-weight:760;margin:4px 0 0;color:var(--navy-900)}.answer-actions{display:flex;gap:6px}
+.answer-body{font-size:13px;line-height:1.72;color:#354052}.answer-body p{margin:0 0 13px}.answer-body h4{margin:18px 0 6px;font-size:10.5px;color:var(--navy-900);letter-spacing:.07em;text-transform:uppercase}.answer-body ol{padding-left:20px;margin:8px 0 14px}.answer-body li{margin:6px 0;padding-left:2px}
+.cite-pill{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;border:0;border-radius:5px;background:var(--wine-100);color:var(--wine-700);font-size:9px;font-weight:800;vertical-align:2px;margin-left:3px;cursor:pointer}.cite-pill:hover{background:#ecd4d8}
+.answer-note{margin-top:17px;padding-top:12px;border-top:1px solid var(--line);display:flex;align-items:center;gap:7px;color:var(--muted);font-size:9.5px}.answer-note svg{width:13px;height:13px;color:var(--green)}
+.empty-state{min-height:210px;display:grid;place-items:center;text-align:center;padding:26px;color:var(--muted)}.empty-icon{width:42px;height:42px;border-radius:10px;background:var(--violet-50);border:1px solid var(--violet-100);color:#5a6482;display:grid;place-items:center;margin:0 auto 11px}.empty-icon svg{width:19px;height:19px}.empty-title{font-size:12px;font-weight:720;color:#3d4758}.empty-copy{font-size:10.5px;line-height:1.55;max-width:330px;margin-top:4px}
+.evidence-panel{overflow:hidden}.evidence-list{display:grid}.source-card{padding:14px 15px;border-bottom:1px solid var(--line);cursor:default}.source-card:last-child{border-bottom:0}.source-card:hover{background:#fcfbfb}.source-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.source-index{width:21px;height:21px;border-radius:6px;background:var(--navy-900);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:800;flex:0 0 auto}.source-name{font-size:11px;font-weight:700;color:#313a4a;line-height:1.35;flex:1}.source-page{font-size:8.5px;font-weight:800;color:var(--wine-700);background:var(--wine-100);border-radius:5px;padding:3px 5px;white-space:nowrap}.source-meta{font-size:9px;color:var(--muted-2);margin:6px 0 0 31px}.source-snippet{font-size:9.7px;line-height:1.5;color:#667085;margin:8px 0 0 31px}.source-actions{margin:9px 0 0 31px;display:flex;gap:7px}.source-link{border:0;background:transparent;color:var(--wine-600);font-size:9.3px;font-weight:740;cursor:pointer;padding:0}.source-link:hover{text-decoration:underline}.count-badge{min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:#f1f3f6;color:#566173;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:760}
+/* Journal */
+.journal-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start}.paper-browser{overflow:hidden}.paper-search{padding:12px;border-bottom:1px solid var(--line)}.paper-search input{width:100%;height:36px;border:1px solid var(--line);border-radius:7px;padding:0 10px;outline:0}.paper-list{max-height:650px;overflow:auto}.paper-row{width:100%;border:0;border-bottom:1px solid var(--line);background:#fff;text-align:left;padding:13px 14px;cursor:pointer}.paper-row:hover{background:#fafafb}.paper-row.active{background:var(--wine-50);box-shadow:inset 3px 0 0 var(--wine-600)}.paper-row-title{font-size:10.8px;font-weight:700;line-height:1.4;color:#333d4e}.paper-row-desc{font-size:9px;line-height:1.45;color:var(--muted);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.paper-row-meta{display:flex;gap:6px;align-items:center;margin-top:7px}.tag{display:inline-flex;align-items:center;height:20px;border-radius:5px;padding:0 6px;font-size:8.5px;font-weight:740;background:var(--violet-50);color:#58617c;border:1px solid var(--violet-100)}
+.summary-workspace{min-height:590px;overflow:hidden}.summary-toolbar{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;background:#fdfdfd}.summary-title{font-size:12.5px;font-weight:740;color:var(--navy-900);max-width:560px}.summary-meta{font-size:9.5px;color:var(--muted);margin-top:4px}.summary-actions{display:flex;gap:7px;align-items:center}.mode-select{height:36px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:0 9px;font-size:10px}.summary-body{padding:5px 20px 22px}.summary-section{display:grid;grid-template-columns:120px minmax(0,1fr);gap:22px;padding:18px 0;border-bottom:1px solid var(--line)}.summary-section:last-child{border-bottom:0}.summary-label{font-size:9px;font-weight:820;letter-spacing:.08em;text-transform:uppercase;color:var(--wine-600)}.summary-value{font-size:11.5px;line-height:1.67;color:#3d4758}.evidence-item{padding:9px 11px;border-left:3px solid #c9979e;background:var(--wine-50);border-radius:0 7px 7px 0;margin-bottom:7px;color:#5e4a4e;font-size:10px;line-height:1.5}
+/* Library */
+.library-controls{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap}.control-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.library-controls input,.library-controls select{height:35px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:0 9px;outline:0;font-size:10.5px}.library-controls input{width:290px}.doc-table-wrap{overflow:auto}.doc-table{width:100%;border-collapse:collapse}.doc-table th{background:#f8f9fb;color:#7a8495;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:10px 13px;border-bottom:1px solid var(--line)}.doc-table td{padding:12px 13px;border-bottom:1px solid var(--line);font-size:10.5px;color:#546071;vertical-align:middle}.doc-table tr:last-child td{border-bottom:0}.doc-table tbody tr:hover{background:#fcfcfd}.doc-main{display:flex;align-items:center;gap:10px;min-width:330px}.doc-name{font-size:10.8px;font-weight:700;color:#303949}.doc-desc{font-size:8.8px;color:var(--muted-2);margin-top:3px;max-width:490px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.type-chip{height:21px;display:inline-flex;align-items:center;padding:0 7px;border-radius:5px;font-size:8.5px;font-weight:740;border:1px solid #ecd7da;background:var(--wine-50);color:var(--wine-700)}.type-chip.journal{border-color:#dddff0;background:#f6f5fb;color:#555f80}.open-doc{border:0;background:transparent;color:var(--wine-600);font-size:9px;font-weight:750;cursor:pointer}.open-doc:hover{text-decoration:underline}
+/* modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(7,14,27,.58);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}.modal-backdrop.show{display:flex}.modal{width:min(1180px,96vw);height:min(820px,90vh);background:#fff;border-radius:14px;box-shadow:var(--shadow-lg);display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}.modal-head{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px}.modal-title{font-size:12px;font-weight:740;color:var(--navy-900)}.modal-meta{font-size:9px;color:var(--muted);margin-top:3px}.modal-close{width:32px;height:32px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:17px;color:var(--muted)}.modal iframe{width:100%;height:100%;border:0;background:#eef1f5}
+/* misc */
+.loading-row{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:10.5px}.spinner{width:14px;height:14px;border:2px solid #d7dce5;border-top-color:var(--wine-600);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;right:20px;bottom:20px;z-index:120;background:var(--navy-900);color:#fff;border-radius:9px;padding:10px 12px;min-width:240px;max-width:360px;font-size:10.5px;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(10px);pointer-events:none;transition:.18s}.toast.show{opacity:1;transform:translateY(0)}.toast.error{background:#7d2632}
+@media(max-width:1050px){.app{grid-template-columns:78px minmax(0,1fr)}.brand{justify-content:center;padding-inline:0}.brand-copy,.nav-caption,.nav-btn span,.sidebar-card{display:none}.nav-btn{justify-content:center}.metrics{grid-template-columns:repeat(2,1fr)}.answer-grid,.overview-grid,.journal-layout{grid-template-columns:1fr}.evidence-panel{min-height:auto}.paper-list{max-height:330px}}
+@media(max-width:720px){.app{display:block}.sidebar{height:auto;position:static;flex-direction:row;align-items:center;padding:8px 10px}.brand{padding:0;margin-right:8px}.brand-logo{width:34px;height:34px;border-radius:9px}.nav{display:flex;overflow-x:auto}.nav-btn{width:auto}.topbar{display:none}.content{padding:22px 14px 45px}.metrics{grid-template-columns:1fr 1fr}.search-box,.hero-search{grid-template-columns:1fr}.search-btn{min-height:42px}.summary-section{grid-template-columns:1fr;gap:6px}.doc-table th:nth-child(4),.doc-table td:nth-child(4){display:none}.page-title{font-size:22px}.overview-hero{padding:24px 20px}.hero-title{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><img src="/ui/assets/mcbeth-lab-mark.png" alt="McBeth Lab logo" /></div>
+      <div class="brand-copy"><div class="brand-name">RadOncDocs</div><div class="brand-lab">McBeth Lab · source-cited document intelligence</div></div>
+    </div>
+    <div class="nav-caption">Workspace</div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>Overview</span></button>
+      <button class="nav-btn" data-view="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>Policy search</span></button>
+      <button class="nav-btn" data-view="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5h14v15H5z"/><path d="M8 8h8M8 11.5h8M8 15h5"/></svg><span>Journal summaries</span></button>
+      <button class="nav-btn" data-view="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6.5h16M4 11.5h16M4 16.5h16"/><path d="M7 4v5M12 9v5M17 14v5"/></svg><span>Library</span></button>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-card">
+      <div class="index-row"><span id="indexDot" class="status-dot"></span><span id="indexText">Checking index…</span></div>
+      <div class="sidebar-meta" id="docCountText">Loading workspace</div>
+    </div>
+  </aside>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="top-title-wrap"><div class="topbar-title" id="topbarTitle">Overview</div><div class="topbar-path">/ research knowledge workspace</div></div>
+      <div class="topbar-actions"><div class="workspace-chip"><span class="dot"></span><span id="workspaceChip">Demo corpus</span></div></div>
+    </header>
+
+    <main class="content">
+      <section id="view-overview" class="view active">
+        <div class="overview-hero panel">
+          <div class="hero-copy">
+            <div class="hero-kicker">Research knowledge workspace</div>
+            <h1 class="hero-title">Find the policy. Verify the source.<br/>Keep the workflow moving.</h1>
+            <div class="hero-sub">Search procedures and research literature in one source-cited workspace, with the supporting document always within reach.</div>
+          </div>
+          <div class="hero-search"><input id="overviewQuery" placeholder="Ask about remote access, model review, data QC…" /><button id="overviewSearchBtn" class="btn">Search policies</button></div>
+        </div>
+        <div class="metrics">
+          <div class="panel metric"><div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.5h8l4 4V20H6z"/><path d="M14 3.5v4h4"/></svg></div><div><div class="metric-value" id="metricDocs">—</div><div class="metric-label">Indexed documents</div></div></div>
+          <div class="panel metric"><div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><div><div class="metric-value" id="metricPolicies">—</div><div class="metric-label">Policies & procedures</div></div></div>
+          <div class="panel metric"><div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></div><div><div class="metric-value" id="metricJournals">—</div><div class="metric-label">Research articles</div></div></div>
+          <div class="panel metric"><div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h6l2-2h8v14H4z"/></svg></div><div><div class="metric-value" id="metricCategories">—</div><div class="metric-label">Knowledge categories</div></div></div>
+        </div>
+        <div class="overview-grid">
+          <section class="panel"><div class="panel-head"><h3>Recently updated documents</h3><button class="text-link" data-jump="library">View library</button></div><div id="recentDocs" class="recent-docs"><div class="empty-state"><div class="loading-row"><span class="spinner"></span>Loading library…</div></div></div></section>
+          <section class="panel"><div class="panel-head"><h3 id="quickListTitle">Suggested searches</h3><button class="text-link" data-jump="search">Open search</button></div><div id="quickQueries" class="quick-list"></div></section>
+        </div>
+      </section>
+
+      <section id="view-search" class="view">
+        <div class="page-head"><div><div class="page-eyebrow">Source-cited retrieval</div><h1 class="page-title">Policy search</h1><p class="page-subtitle">Ask a workflow question and trace the answer back to the exact document, section, and page.</p></div></div>
+        <section class="panel search-shell">
+          <div class="search-box"><div class="search-input-wrap"><label for="q">Question</label><textarea id="q" class="search-input" placeholder="What checks are required before a dataset is frozen for evaluation?"></textarea></div><button id="askBtn" class="btn primary search-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h13M13 6l6 6-6 6"/></svg>Search</button></div>
+          <div class="suggestions"><span class="suggestions-label">Try:</span><button class="suggestion" data-example="What are users responsible for under the remote access policy?">Remote access responsibilities</button><button class="suggestion" data-example="How should an experimental model review be completed?">Model review workflow</button><button class="suggestion" data-example="What checks are required before a dataset is frozen for evaluation?">Dataset QC</button><button class="suggestion" data-example="What should I do if an imaging overlay looks misaligned?">Overlay alignment</button></div>
+          <details class="settings"><summary>Advanced retrieval settings</summary><div class="settings-grid"><label class="checkbox"><input type="checkbox" id="policyOnly" checked /> Policies only</label><div class="field"><label for="k">Candidate results</label><input id="k" type="number" min="1" max="20" value="8" /></div><div class="field"><label for="min_score">Minimum score</label><input id="min_score" type="number" min="0" max="1" step="0.01" value="0.25" /></div></div></details>
+          <div id="searchError" class="alert"></div>
+        </section>
+        <div class="answer-grid">
+          <section class="panel answer-card" aria-live="polite">
+            <div id="answerEmpty" class="empty-state"><div><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div><div class="empty-title">Ready when you are</div><div class="empty-copy">Search the policy library. Supporting evidence will appear beside the answer.</div></div></div>
+            <div id="answerContent" class="hidden"><div class="answer-top"><div><div class="answer-label" id="answerMode">Grounded answer</div><h2 class="answer-title">Answer</h2></div><div class="answer-actions"><button id="copyAnsBtn" class="icon-btn" title="Copy answer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button><button id="clearBtn" class="icon-btn" title="Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M7 7l1 14h8l1-14"/></svg></button></div></div><div id="qAnswer" class="answer-body"></div><div class="answer-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5 9.2 17 19 7"/></svg>Answer generated only from indexed workspace documents. Select a citation to inspect the source PDF.</div></div>
+          </section>
+          <aside class="panel evidence-panel"><div class="panel-head"><h3>Supporting evidence</h3><span id="sourceCount" class="count-badge">0</span></div><div id="qSources" class="evidence-list"><div class="empty-state" style="min-height:205px"><div><div class="empty-copy">Sources will appear here after a search.</div></div></div></div></aside>
+        </div>
+      </section>
+
+      <section id="view-journal" class="view">
+        <div class="page-head"><div><div class="page-eyebrow">Research literature</div><h1 class="page-title">Journal summaries</h1><p class="page-subtitle">Browse the research library and turn a paper into a structured, evidence-backed digest.</p></div><button id="digestBtn" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5h14v15H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Build collection digest</button></div>
+        <div class="journal-layout">
+          <aside class="panel paper-browser"><div class="panel-head"><h3>Research library</h3><span id="paperCount" class="count-badge">0</span></div><div class="paper-search"><input id="paperFilter" type="search" placeholder="Filter by title or topic…" /></div><div id="paperList" class="paper-list"><div class="empty-state"><div class="loading-row"><span class="spinner"></span>Loading papers…</div></div></div></aside>
+          <section class="panel summary-workspace"><div id="summaryEmpty" class="empty-state" style="min-height:590px"><div><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5h14v15H5z"/><path d="M8 8h8M8 11.5h8M8 15h5"/></svg></div><div class="empty-title">Choose a paper</div><div class="empty-copy">Select a research article to inspect its metadata and generate a structured summary.</div></div></div><div id="summaryContent" class="hidden"><div class="summary-toolbar"><div><div id="selectedPaperTitle" class="summary-title"></div><div id="selectedPaperMeta" class="summary-meta"></div></div><div class="summary-actions"><select id="summaryMode" class="mode-select"><option value="extractive">Extractive</option><option value="abstractive">Abstractive</option></select><button id="openPaperBtn" class="btn">Open PDF</button><button id="summaryBtn" class="btn primary">Generate summary</button><button id="shareBtn" class="btn">Share</button></div></div><div id="summaryResult" class="summary-body"><div class="empty-state" style="min-height:450px"><div><div class="empty-title">Ready to summarize</div><div class="empty-copy">Generate a structured view of the paper's methods, findings, limitations, and supporting excerpts.</div></div></div></div></div></section>
+        </div>
+      </section>
+
+      <section id="view-library" class="view">
+        <div class="page-head"><div><div class="page-eyebrow">Indexed corpus</div><h1 class="page-title">Document library</h1><p class="page-subtitle">Explore the policies, SOPs, and research papers available in the indexed workspace.</p></div><button id="refreshDocsBtn" class="btn">Refresh</button></div>
+        <section class="panel"><div class="library-controls"><div class="control-group"><input id="libraryFilter" type="search" placeholder="Search documents…" /><select id="typeFilter"><option value="">All document types</option><option value="policy">Policies & procedures</option><option value="journal">Research articles</option></select><select id="categoryFilter"><option value="">All categories</option></select></div><span id="libraryCount" class="count-badge">0</span></div><div class="doc-table-wrap"><table class="doc-table"><thead><tr><th>Document</th><th>Type</th><th>Category</th><th>Owner</th><th>Updated</th><th></th></tr></thead><tbody id="docTableBody"><tr><td colspan="6">Loading documents…</td></tr></tbody></table></div></section>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div id="pdfModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Source document preview"><div class="modal"><div class="modal-head"><div><div id="modalTitle" class="modal-title">Source document</div><div id="modalMeta" class="modal-meta"></div></div><button id="modalClose" class="modal-close" aria-label="Close">×</button></div><iframe id="pdfFrame" title="PDF preview"></iframe></div></div>
+<div id="toast" class="toast" role="status"></div>
+<script>
+const $ = id => document.getElementById(id);
+const escapeHtml = (v='') => String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const fileStem = (n='') => n.replace(/\.pdf$/i,'');
+const fmtDate = v => { if(!v) return '—'; const d=new Date(v+'T12:00:00'); return Number.isNaN(d.getTime())?v:d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); };
+let DOCS=[], PAPERS=[], SOURCES=[], SELECTED_PAPER=null, toastTimer;
+const defaultQueries=[
+  'What are users responsible for under the remote access policy?',
+  'How should an experimental model review be completed?',
+  'What checks are required before a dataset is frozen for evaluation?',
+  'What steps should be taken after a suspected access incident?'
+];
+function toast(msg,type='ok'){const el=$('toast');el.textContent=msg;el.className=`toast show${type==='error'?' error':''}`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',2500)}
+function navigate(view){document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id===`view-${view}`));document.querySelectorAll('.nav-btn').forEach(el=>el.classList.toggle('active',el.dataset.view===view));const labels={overview:'Overview',search:'Policy search',journal:'Journal summaries',library:'Document library'};$('topbarTitle').textContent=labels[view]||'RadOncDocs';window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.view)));
+document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.jump)));
+function saveSearch(q){if(!q)return;let rows=[];try{rows=JSON.parse(localStorage.getItem('radoncdocsRecent')||'[]')}catch{};rows=[q,...rows.filter(x=>x!==q)].slice(0,5);localStorage.setItem('radoncdocsRecent',JSON.stringify(rows));renderQuickQueries();}
+function recentSearches(){try{return JSON.parse(localStorage.getItem('radoncdocsRecent')||'[]')}catch{return[]}}
+function renderQuickQueries(){const recent=recentSearches();const fill=[...recent,...defaultQueries.filter(q=>!recent.includes(q))].slice(0,4);const rows=recent.length?fill:defaultQueries;$('quickListTitle').textContent=recent.length?'Recent searches':'Suggested searches';$('quickQueries').innerHTML=rows.map(q=>`<button class="quick-query" data-q="${escapeHtml(q)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>${escapeHtml(q)}</span></button>`).join('');$('quickQueries').querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{navigate('search');$('q').value=b.dataset.q;ask();}));}
+function setSearchError(m=''){const el=$('searchError');el.textContent=m;el.classList.toggle('show',Boolean(m));}
+function pageLabel(s){if(s?.page)return `p. ${s.page}`;if(s?.page_from&&s?.page_to&&s.page_from!==s.page_to)return `pp. ${s.page_from}-${s.page_to}`;if(s?.page_from)return `p. ${s.page_from}`;return 'Source';}
+function cleanTitle(s){const t=String(s?.title||'').trim();return t&&!/^(anonymous|untitled|none|null)$/i.test(t)?t:fileStem(s?.file||'Document');}
+function openPdf(url,title='Source document',meta='',page=null){if(!url){toast('Source preview is unavailable','error');return}const suffix=page?`#page=${page}`:'';$('modalTitle').textContent=title;$('modalMeta').textContent=meta;$('pdfFrame').src=url+suffix;$('pdfModal').classList.add('show');document.body.style.overflow='hidden';}
+function closePdf(){$('pdfModal').classList.remove('show');$('pdfFrame').src='about:blank';document.body.style.overflow='';}
+$('modalClose').addEventListener('click',closePdf);$('pdfModal').addEventListener('click',e=>{if(e.target===$('pdfModal'))closePdf()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePdf()});
+function renderRecentDocs(){const rows=[...DOCS].sort((a,b)=>(b.updated||'').localeCompare(a.updated||'')).slice(0,5);$('recentDocs').innerHTML=rows.map(d=>`<div class="recent-doc" data-recent-rel="${escapeHtml(d.rel||'')}" title="Open document"><div class="doc-icon ${d.doc_type==='journal'?'journal':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.5h8l4 4V20H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h5"/></svg></div><div><div class="recent-title">${escapeHtml(d.title||fileStem(d.file))}</div><div class="recent-meta">${escapeHtml(d.category||'')} · ${escapeHtml(d.owner||'')}</div></div><div class="recent-date">${fmtDate(d.updated)}</div></div>`).join('')||'<div class="empty-state"><div class="empty-copy">No documents found.</div></div>';$('recentDocs').querySelectorAll('[data-recent-rel]').forEach(el=>el.addEventListener('click',()=>{const d=DOCS.find(x=>x.rel===el.dataset.recentRel);if(d&&d.url)openPdf(d.url,d.title,`${d.category} · ${d.owner} · ${fmtDate(d.updated)}`)}));}
+async function loadHealth(){try{const r=await fetch('/health');const d=await r.json();const ready=Boolean(d.index_ready);$('indexDot').classList.toggle('ready',ready);$('indexText').textContent=ready?'Index ready':'Index unavailable';$('docCountText').textContent=`${d.document_count||0} documents · v${d.version||''}`;$('workspaceChip').textContent=`Synthetic demo · ${d.document_count||0} docs`;}catch{$('indexText').textContent='API unavailable'}}
+async function loadStats(){try{const r=await fetch('/workspace/stats');const d=await r.json();$('metricDocs').textContent=d.documents??'—';$('metricPolicies').textContent=d.policies??'—';$('metricJournals').textContent=d.journals??'—';$('metricCategories').textContent=d.categories??'—';}catch{}}
+async function loadDocs(){try{const r=await fetch('/docs/list');const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);DOCS=Array.isArray(d)?d:[];renderRecentDocs();populateCategoryFilter();renderDocs();}catch(e){$('docTableBody').innerHTML=`<tr><td colspan="6" style="color:#8a2c39">${escapeHtml(e.message||'Could not load documents')}</td></tr>`}}
+function populateCategoryFilter(){const sel=$('categoryFilter'),current=sel.value;const cats=[...new Set(DOCS.map(d=>d.category).filter(Boolean))].sort();sel.innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');if(cats.includes(current))sel.value=current;}
+function renderDocs(){const f=($('libraryFilter').value||'').toLowerCase(),type=$('typeFilter').value,cat=$('categoryFilter').value;const rows=DOCS.filter(d=>(!f||[d.title,d.file,d.description,d.owner,d.category].join(' ').toLowerCase().includes(f))&&(!type||d.doc_type===type)&&(!cat||d.category===cat));$('libraryCount').textContent=rows.length;$('docTableBody').innerHTML=rows.map(d=>`<tr><td><div class="doc-main"><div class="doc-icon ${d.doc_type==='journal'?'journal':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.5h8l4 4V20H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h5"/></svg></div><div><div class="doc-name">${escapeHtml(d.title||fileStem(d.file))}</div><div class="doc-desc">${escapeHtml(d.description||d.file)}</div></div></div></td><td><span class="type-chip ${d.doc_type==='journal'?'journal':''}">${d.doc_type==='journal'?'Research':'Policy / SOP'}</span></td><td>${escapeHtml(d.category||'—')}</td><td>${escapeHtml(d.owner||'—')}</td><td>${fmtDate(d.updated)}</td><td>${d.url?`<button class="open-doc" data-open-rel="${escapeHtml(d.rel)}">Open PDF</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6" style="color:#667085">No matching documents.</td></tr>';$('docTableBody').querySelectorAll('[data-open-rel]').forEach(b=>b.addEventListener('click',()=>{const d=DOCS.find(x=>x.rel===b.dataset.openRel);if(d)openPdf(d.url,d.title,`${d.category} · ${d.owner} · ${fmtDate(d.updated)}`)}));}
+$('libraryFilter').addEventListener('input',renderDocs);$('typeFilter').addEventListener('change',renderDocs);$('categoryFilter').addEventListener('change',renderDocs);$('refreshDocsBtn').addEventListener('click',loadDocs);
+function replaceCitations(html){return html.replace(/\[(\d+)\]/g,(_,n)=>`<button class="cite-pill" data-cite="${n}">${n}</button>`)}
+function renderAnswerText(raw){let text=String(raw||'').replace(/\r/g,'').trim();text=text.replace(/\s+(?=\d+[.)]\s+)/g,'\n');if(!text)return '<p>No answer returned.</p>';const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);let html='',list=false;for(const line of lines){const step=line.match(/^\d+[.)]\s+(.+)$/);const head=/^[A-Z][A-Z0-9 /&()-]{2,}:?$/.test(line)&&line.length<70;if(step){if(!list){html+='<ol>';list=true}html+=`<li>${replaceCitations(escapeHtml(step[1]))}</li>`;continue}if(list){html+='</ol>';list=false}html+=head?`<h4>${escapeHtml(line.replace(/:$/,''))}</h4>`:`<p>${replaceCitations(escapeHtml(line))}</p>`;}if(list)html+='</ol>';return html;}
+function renderSources(src=[]){SOURCES=src;$('sourceCount').textContent=src.length;if(!src.length){$('qSources').innerHTML='<div class="empty-state" style="min-height:205px"><div class="empty-copy">No supporting evidence returned.</div></div>';return}$('qSources').innerHTML=src.map((s,i)=>`<article class="source-card"><div class="source-top"><span class="source-index">${i+1}</span><div class="source-name">${escapeHtml(cleanTitle(s))}</div><span class="source-page">${escapeHtml(pageLabel(s))}</span></div><div class="source-meta">${escapeHtml([s.section,s.category,s.owner].filter(Boolean).join(' · '))}</div><div class="source-snippet">${escapeHtml(s.snippet||'')}</div>${s.url?`<div class="source-actions"><button class="source-link" data-source-open="${i}">Open source PDF</button></div>`:''}</article>`).join('');$('qSources').querySelectorAll('[data-source-open]').forEach(b=>b.addEventListener('click',()=>{const s=SOURCES[Number(b.dataset.sourceOpen)];openPdf(s.url,cleanTitle(s),`${[s.section,s.category,s.owner].filter(Boolean).join(' · ')} · ${pageLabel(s)}`,s.page||s.page_from)}));}
+function bindCites(){$('qAnswer').querySelectorAll('[data-cite]').forEach(b=>b.addEventListener('click',()=>{const s=SOURCES[Number(b.dataset.cite)-1];if(s)openPdf(s.url,cleanTitle(s),`${[s.section,s.category,s.owner].filter(Boolean).join(' · ')} · ${pageLabel(s)}`,s.page||s.page_from)}));}
+async function ask(){const question=$('q').value.trim();if(!question){$('q').focus();return}setSearchError('');saveSearch(question);const btn=$('askBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Searching';$('answerContent').classList.add('hidden');$('answerEmpty').classList.remove('hidden');$('answerEmpty').innerHTML='<div class="loading-row"><span class="spinner"></span>Searching the indexed workspace…</div>';renderSources([]);try{const r=await fetch('/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,policy_only:$('policyOnly').checked,k:Number($('k').value||8),min_score:Number($('min_score').value||.25)})});const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);$('answerEmpty').classList.add('hidden');$('answerContent').classList.remove('hidden');const modes={'procedure-extractive':'Procedure answer','rag+writer':'Grounded synthesis','extractive-synthesis':'Source synthesis','extract-fallback':'Best source match'};$('answerMode').textContent=d.found?(modes[d.mode]||'Grounded answer'):'No confident match';$('qAnswer').innerHTML=d.found?renderAnswerText(d.answer):`<p>${escapeHtml(d.answer||'No answer found.')}</p>`;$('qAnswer').dataset.raw=d.answer||'';renderSources(Array.isArray(d.sources)?d.sources:[]);bindCites();}catch(e){$('answerEmpty').innerHTML='<div><div class="empty-title">Search failed</div><div class="empty-copy">The request could not be completed.</div></div>';setSearchError(e.message||String(e));}finally{btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h13M13 6l6 6-6 6"/></svg>Search';}}
+$('askBtn').addEventListener('click',ask);$('q').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();ask()}});document.querySelectorAll('[data-example]').forEach(b=>b.addEventListener('click',()=>{$('q').value=b.dataset.example;ask()}));$('copyAnsBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('qAnswer').dataset.raw||$('qAnswer').textContent||'');toast('Answer copied')}catch{toast('Could not copy answer','error')}});$('clearBtn').addEventListener('click',()=>{$('q').value='';$('answerContent').classList.add('hidden');$('answerEmpty').classList.remove('hidden');$('answerEmpty').innerHTML='<div><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div><div class="empty-title">Ready when you are</div><div class="empty-copy">Search the policy library. Supporting evidence will appear beside the answer.</div></div>';renderSources([])});
+$('overviewSearchBtn').addEventListener('click',()=>{const q=$('overviewQuery').value.trim();if(!q)return;navigate('search');$('q').value=q;ask()});$('overviewQuery').addEventListener('keydown',e=>{if(e.key==='Enter')$('overviewSearchBtn').click()});
+function renderPaperList(filter=''){const f=filter.toLowerCase();const rows=PAPERS.filter(p=>!f||[p.title,p.file,p.category,p.description,p.owner].join(' ').toLowerCase().includes(f));$('paperCount').textContent=rows.length;$('paperList').innerHTML=rows.map(p=>`<button class="paper-row ${SELECTED_PAPER?.file===p.file?'active':''}" data-paper="${escapeHtml(p.file)}"><div class="paper-row-title">${escapeHtml(p.title||fileStem(p.file))}</div><div class="paper-row-desc">${escapeHtml(p.description||'Research article')}</div><div class="paper-row-meta"><span class="tag">${escapeHtml(p.category||'Research')}</span><span class="tag">${escapeHtml(String(p.year||'2026'))}</span></div></button>`).join('')||'<div class="empty-state"><div class="empty-copy">No matching papers.</div></div>';$('paperList').querySelectorAll('[data-paper]').forEach(b=>b.addEventListener('click',()=>selectPaper(PAPERS.find(p=>p.file===b.dataset.paper))));}
+function selectPaper(p){if(!p)return;SELECTED_PAPER=p;renderPaperList($('paperFilter').value||'');$('summaryEmpty').classList.add('hidden');$('summaryContent').classList.remove('hidden');$('selectedPaperTitle').textContent=p.title||fileStem(p.file);$('selectedPaperMeta').textContent=`${p.category||'Research'} · ${p.owner||'Demo group'} · ${p.year||'2026'}`;$('summaryResult').innerHTML='<div class="empty-state" style="min-height:450px"><div><div class="empty-title">Ready to summarize</div><div class="empty-copy">Generate a structured view of the paper\'s methods, findings, limitations, and supporting excerpts.</div></div></div>';}
+async function loadPapers(){try{const r=await fetch('/journal/list');const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);PAPERS=Array.isArray(d)?d:[];renderPaperList();if(PAPERS.length)selectPaper(PAPERS[0]);}catch(e){$('paperList').innerHTML=`<div class="empty-state"><div class="empty-copy">${escapeHtml(e.message||'Could not load papers')}</div></div>`}}
+$('paperFilter').addEventListener('input',e=>renderPaperList(e.target.value));$('openPaperBtn').addEventListener('click',()=>{if(SELECTED_PAPER)openPdf(SELECTED_PAPER.url,SELECTED_PAPER.title,`${SELECTED_PAPER.category} · ${SELECTED_PAPER.owner}`)});
+function renderSummary(d){const sec=[['TL;DR',d.tldr],['Methods',d.methods],['Key findings',d.key_findings],['Limitations',d.limitations]].filter(([,v])=>v);let html=sec.map(([l,v])=>`<section class="summary-section"><div class="summary-label">${escapeHtml(l)}</div><div class="summary-value">${escapeHtml(v)}</div></section>`).join('');if(Array.isArray(d.evidence_spans)&&d.evidence_spans.length)html+=`<section class="summary-section"><div class="summary-label">Evidence</div><div class="summary-value">${d.evidence_spans.map(e=>`<div class="evidence-item">${escapeHtml(e)}</div>`).join('')}</div></section>`;$('summaryResult').innerHTML=html||'<div class="empty-state"><div class="empty-copy">No summary returned.</div></div>';}
+async function generateSummary(){if(!SELECTED_PAPER)return;const b=$('summaryBtn');b.disabled=true;b.innerHTML='<span class="spinner"></span>Summarizing';$('selectedPaperMeta').textContent='Analyzing document…';try{const u=new URL('/journal/tldr',location.origin);u.searchParams.set('file',SELECTED_PAPER.file);u.searchParams.set('mode',$('summaryMode').value);const r=await fetch(u);const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);renderSummary(d);$('selectedPaperTitle').textContent=d.title||SELECTED_PAPER.title;$('selectedPaperMeta').textContent=`${d.pages||'?'} pages · ${SELECTED_PAPER.category||'Research'} · ${$('summaryMode').value} summary`;}catch(e){toast(e.message||'Summary failed','error');$('selectedPaperMeta').textContent='Summary failed';}finally{b.disabled=false;b.textContent='Generate summary';}}
+$('summaryBtn').addEventListener('click',generateSummary);$('shareBtn').addEventListener('click',async()=>{if(!SELECTED_PAPER)return;try{const u=new URL('/journal/tldr_share',location.origin);u.searchParams.set('file',SELECTED_PAPER.file);u.searchParams.set('mode',$('summaryMode').value);const r=await fetch(u);const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);const href=d.url.startsWith('/')?location.origin+d.url:d.url;try{await navigator.clipboard.writeText(href)}catch{};window.open(href,'_blank','noopener');toast('Shareable summary opened')}catch(e){toast(e.message||'Share failed','error')}});$('digestBtn').addEventListener('click',async()=>{const b=$('digestBtn');b.disabled=true;try{const u=new URL('/journal/digest',location.origin);u.searchParams.set('mode','extractive');const r=await fetch(u);const d=await r.json();if(!r.ok)throw new Error(d?.detail||`Request failed (${r.status})`);window.open(d.url.startsWith('/')?location.origin+d.url:d.url,'_blank','noopener');toast(`Built digest for ${d.count||0} papers`)}catch(e){toast(e.message||'Digest failed','error')}finally{b.disabled=false}});
+function applyInitialRoute(){const p=new URLSearchParams(location.search);const view=p.get('view');if(['overview','search','journal','library'].includes(view))navigate(view);const q=p.get('q');if(q){$('q').value=q;if(p.get('run')==='1'){navigate('search');setTimeout(ask,120)}}}
+renderQuickQueries();Promise.allSettled([loadHealth(),loadStats(),loadDocs(),loadPapers()]).then(applyInitialRoute);
+</script>
+</body>
+</html>

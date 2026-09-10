@@ -1,0 +1,486 @@
+[
+  {
+    "id": "POL-001",
+    "file": "Remote Access and MFA Policy.pdf",
+    "rel": "Policies and Procedures/Remote Access and MFA Policy.pdf",
+    "title": "Remote Access and MFA Policy",
+    "doc_type": "policy",
+    "category": "Access & Security",
+    "owner": "Research IT",
+    "updated": "2026-08-18",
+    "status": "Current",
+    "description": "Requirements for remote access to research systems, including approval, MFA, and user responsibilities.",
+    "tags": [
+      "access & security",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-002",
+    "file": "Approved Device Security Standard.pdf",
+    "rel": "Policies and Procedures/Approved Device Security Standard.pdf",
+    "title": "Approved Device Security Standard",
+    "doc_type": "policy",
+    "category": "Access & Security",
+    "owner": "Research IT",
+    "updated": "2026-07-29",
+    "status": "Current",
+    "description": "Baseline controls for laptops and workstations used with research data and internal applications.",
+    "tags": [
+      "access & security",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-003",
+    "file": "Imaging Data De-identification SOP.pdf",
+    "rel": "Policies and Procedures/Imaging Data De-identification SOP.pdf",
+    "title": "Imaging Data De-identification SOP",
+    "doc_type": "policy",
+    "category": "Data Governance",
+    "owner": "Imaging Informatics",
+    "updated": "2026-08-30",
+    "status": "Current",
+    "description": "Procedure for creating de-identified imaging datasets before research development or external sharing.",
+    "tags": [
+      "data governance",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-004",
+    "file": "Imaging Data Intake Procedure.pdf",
+    "rel": "Policies and Procedures/Imaging Data Intake Procedure.pdf",
+    "title": "Imaging Data Intake Procedure",
+    "doc_type": "policy",
+    "category": "Data Operations",
+    "owner": "Data Engineering",
+    "updated": "2026-09-02",
+    "status": "Current",
+    "description": "Standard intake checks for new imaging batches before model development or review.",
+    "tags": [
+      "data operations",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-005",
+    "file": "Contour Annotation QA Procedure.pdf",
+    "rel": "Policies and Procedures/Contour Annotation QA Procedure.pdf",
+    "title": "Contour Annotation QA Procedure",
+    "doc_type": "policy",
+    "category": "Annotation & Review",
+    "owner": "Clinical AI Operations",
+    "updated": "2026-08-12",
+    "status": "Current",
+    "description": "Quality checks for segmentation annotations before training or evaluation.",
+    "tags": [
+      "annotation & review",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-006",
+    "file": "Experimental Model Review Procedure.pdf",
+    "rel": "Policies and Procedures/Experimental Model Review Procedure.pdf",
+    "title": "Experimental Model Review Procedure",
+    "doc_type": "policy",
+    "category": "Model Governance",
+    "owner": "AI Evaluation",
+    "updated": "2026-09-04",
+    "status": "Current",
+    "description": "Blinded review workflow for experimental model outputs before any downstream study decision.",
+    "tags": [
+      "model governance",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-007",
+    "file": "Model Validation and Release Checklist.pdf",
+    "rel": "Policies and Procedures/Model Validation and Release Checklist.pdf",
+    "title": "Model Validation and Release Checklist",
+    "doc_type": "policy",
+    "category": "Model Governance",
+    "owner": "AI Evaluation",
+    "updated": "2026-08-25",
+    "status": "Current",
+    "description": "Required validation evidence before an experimental model can be promoted to a shared research workflow.",
+    "tags": [
+      "model governance",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-008",
+    "file": "Incident Reporting and Escalation Procedure.pdf",
+    "rel": "Policies and Procedures/Incident Reporting and Escalation Procedure.pdf",
+    "title": "Incident Reporting and Escalation Procedure",
+    "doc_type": "policy",
+    "category": "Access & Security",
+    "owner": "Research IT",
+    "updated": "2026-06-17",
+    "status": "Current",
+    "description": "How to report suspected security, privacy, data-integrity, or system-availability incidents.",
+    "tags": [
+      "access & security",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-009",
+    "file": "Data Sharing Request Policy.pdf",
+    "rel": "Policies and Procedures/Data Sharing Request Policy.pdf",
+    "title": "Data Sharing Request Policy",
+    "doc_type": "policy",
+    "category": "Data Governance",
+    "owner": "Research Operations",
+    "updated": "2026-07-08",
+    "status": "Current",
+    "description": "Approval and packaging requirements before research data or model outputs are shared outside a project workspace.",
+    "tags": [
+      "data governance",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-010",
+    "file": "Research Workspace Access Matrix.pdf",
+    "rel": "Policies and Procedures/Research Workspace Access Matrix.pdf",
+    "title": "Research Workspace Access Matrix",
+    "doc_type": "policy",
+    "category": "Access & Security",
+    "owner": "Research Operations",
+    "updated": "2026-05-21",
+    "status": "Current",
+    "description": "Role-based access expectations for development, staging, review, and archive workspaces.",
+    "tags": [
+      "access & security",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-011",
+    "file": "File Naming and Versioning Standard.pdf",
+    "rel": "Policies and Procedures/File Naming and Versioning Standard.pdf",
+    "title": "File Naming and Versioning Standard",
+    "doc_type": "policy",
+    "category": "Data Operations",
+    "owner": "Data Engineering",
+    "updated": "2026-08-05",
+    "status": "Current",
+    "description": "Naming and versioning conventions for datasets, model outputs, reports, and review exports.",
+    "tags": [
+      "data operations",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-012",
+    "file": "Audit Logging and Review Standard.pdf",
+    "rel": "Policies and Procedures/Audit Logging and Review Standard.pdf",
+    "title": "Audit Logging and Review Standard",
+    "doc_type": "policy",
+    "category": "Access & Security",
+    "owner": "Platform Engineering",
+    "updated": "2026-07-14",
+    "status": "Current",
+    "description": "Minimum events and review practices for internal research applications that modify study state.",
+    "tags": [
+      "access & security",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-013",
+    "file": "HPC Job Submission Guidelines.pdf",
+    "rel": "Policies and Procedures/HPC Job Submission Guidelines.pdf",
+    "title": "HPC Job Submission Guidelines",
+    "doc_type": "policy",
+    "category": "Compute & Infrastructure",
+    "owner": "Research Computing",
+    "updated": "2026-06-28",
+    "status": "Current",
+    "description": "Resource, logging, and reproducibility expectations for model training and large inference jobs.",
+    "tags": [
+      "compute & infrastructure",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-014",
+    "file": "Model Inference Runbook.pdf",
+    "rel": "Policies and Procedures/Model Inference Runbook.pdf",
+    "title": "Model Inference Runbook",
+    "doc_type": "policy",
+    "category": "Model Operations",
+    "owner": "AI Platform",
+    "updated": "2026-09-01",
+    "status": "Current",
+    "description": "Repeatable steps for running a released research model across a new dataset batch.",
+    "tags": [
+      "model operations",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-015",
+    "file": "Dataset Quality Control SOP.pdf",
+    "rel": "Policies and Procedures/Dataset Quality Control SOP.pdf",
+    "title": "Dataset Quality Control SOP",
+    "doc_type": "policy",
+    "category": "Data Operations",
+    "owner": "Data Engineering",
+    "updated": "2026-08-22",
+    "status": "Current",
+    "description": "Dataset-level QC checks before a cohort is frozen for training or evaluation.",
+    "tags": [
+      "data operations",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-016",
+    "file": "Research Data Retention Policy.pdf",
+    "rel": "Policies and Procedures/Research Data Retention Policy.pdf",
+    "title": "Research Data Retention Policy",
+    "doc_type": "policy",
+    "category": "Data Governance",
+    "owner": "Research Operations",
+    "updated": "2026-04-16",
+    "status": "Current",
+    "description": "Retention and disposition expectations for active, archived, and temporary research artifacts.",
+    "tags": [
+      "data governance",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-017",
+    "file": "Software Change Review Procedure.pdf",
+    "rel": "Policies and Procedures/Software Change Review Procedure.pdf",
+    "title": "Software Change Review Procedure",
+    "doc_type": "policy",
+    "category": "Software Engineering",
+    "owner": "Platform Engineering",
+    "updated": "2026-09-03",
+    "status": "Current",
+    "description": "Lightweight review and validation process for changes to shared research applications.",
+    "tags": [
+      "policy",
+      "software engineering",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-018",
+    "file": "Clinician Feedback Capture Procedure.pdf",
+    "rel": "Policies and Procedures/Clinician Feedback Capture Procedure.pdf",
+    "title": "Clinician Feedback Capture Procedure",
+    "doc_type": "policy",
+    "category": "Annotation & Review",
+    "owner": "Clinical AI Operations",
+    "updated": "2026-08-27",
+    "status": "Current",
+    "description": "Consistent capture of reviewer comments, issue tags, and follow-up for AI evaluation studies.",
+    "tags": [
+      "annotation & review",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-019",
+    "file": "Review Portal Study Setup Guide.pdf",
+    "rel": "Policies and Procedures/Review Portal Study Setup Guide.pdf",
+    "title": "Review Portal Study Setup Guide",
+    "doc_type": "policy",
+    "category": "Study Operations",
+    "owner": "AI Evaluation",
+    "updated": "2026-09-05",
+    "status": "Current",
+    "description": "Setup sequence for creating a new blinded evaluation study in the review portal.",
+    "tags": [
+      "policy",
+      "study operations",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "POL-020",
+    "file": "Imaging Overlay Validation SOP.pdf",
+    "rel": "Policies and Procedures/Imaging Overlay Validation SOP.pdf",
+    "title": "Imaging Overlay Validation SOP",
+    "doc_type": "policy",
+    "category": "Imaging Systems",
+    "owner": "Demo Imaging Platform",
+    "updated": "2026-09-06",
+    "status": "Current",
+    "description": "Troubleshooting and validation steps for image overlays that appear shifted, flipped, rotated, or otherwise misaligned.",
+    "tags": [
+      "imaging systems",
+      "policy",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-001",
+    "file": "Automated Contour Quality Assessment in a Multi-Reader Imaging Review Workflow.pdf",
+    "rel": "RedJournal/Automated Contour Quality Assessment in a Multi-Reader Imaging Review Workflow.pdf",
+    "title": "Automated Contour Quality Assessment in a Multi-Reader Imaging Review Workflow",
+    "doc_type": "journal",
+    "category": "Segmentation",
+    "owner": "Demo Imaging AI Group",
+    "updated": "2026-07-18",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic retrospective study of automated quality signals for contour review.",
+    "tags": [
+      "journal",
+      "segmentation",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-002",
+    "file": "Deep Learning Dose Prediction for Partial Breast Irradiation A Synthetic Feasibility Study.pdf",
+    "rel": "RedJournal/Deep Learning Dose Prediction for Partial Breast Irradiation A Synthetic Feasibility Study.pdf",
+    "title": "Deep Learning Dose Prediction for Partial Breast Irradiation: A Synthetic Feasibility Study",
+    "doc_type": "journal",
+    "category": "Dose Prediction",
+    "owner": "Demo Radiation AI Group",
+    "updated": "2026-08-06",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic feasibility study of a 3D neural network for voxel-level dose prediction.",
+    "tags": [
+      "dose prediction",
+      "journal",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-003",
+    "file": "Clinician-AI Agreement in Blinded Segmentation Review.pdf",
+    "rel": "RedJournal/Clinician-AI Agreement in Blinded Segmentation Review.pdf",
+    "title": "Clinician-AI Agreement in Blinded Segmentation Review",
+    "doc_type": "journal",
+    "category": "Human Evaluation",
+    "owner": "Demo Clinical AI Group",
+    "updated": "2026-08-21",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic blinded reader study comparing AI-generated and manually prepared segmentation outputs.",
+    "tags": [
+      "human evaluation",
+      "journal",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-004",
+    "file": "Uncertainty Estimation for Three-Dimensional Medical Image Segmentation.pdf",
+    "rel": "RedJournal/Uncertainty Estimation for Three-Dimensional Medical Image Segmentation.pdf",
+    "title": "Uncertainty Estimation for Three-Dimensional Medical Image Segmentation",
+    "doc_type": "journal",
+    "category": "Segmentation",
+    "owner": "Demo Imaging AI Group",
+    "updated": "2026-06-12",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic study comparing uncertainty signals with segmentation-error patterns.",
+    "tags": [
+      "journal",
+      "segmentation",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-005",
+    "file": "Workflow Efficiency of Source-Cited Policy Search for Research Operations.pdf",
+    "rel": "RedJournal/Workflow Efficiency of Source-Cited Policy Search for Research Operations.pdf",
+    "title": "Workflow Efficiency of Source-Cited Policy Search for Research Operations",
+    "doc_type": "journal",
+    "category": "Information Retrieval",
+    "owner": "Demo Research Informatics",
+    "updated": "2026-09-01",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic usability evaluation of hybrid lexical-semantic document retrieval with page citations.",
+    "tags": [
+      "information retrieval",
+      "journal",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-006",
+    "file": "Multi-Label Segmentation of Overlapping Anatomy in Volumetric Imaging.pdf",
+    "rel": "RedJournal/Multi-Label Segmentation of Overlapping Anatomy in Volumetric Imaging.pdf",
+    "title": "Multi-Label Segmentation of Overlapping Anatomy in Volumetric Imaging",
+    "doc_type": "journal",
+    "category": "Segmentation",
+    "owner": "Demo Imaging AI Group",
+    "updated": "2026-07-30",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic evaluation of multi-channel label handling for overlapping segmentation targets.",
+    "tags": [
+      "journal",
+      "segmentation",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-007",
+    "file": "Human Factors in AI-Assisted Imaging Review Interface Cues Blinding and Reviewer Confidence.pdf",
+    "rel": "RedJournal/Human Factors in AI-Assisted Imaging Review Interface Cues Blinding and Reviewer Confidence.pdf",
+    "title": "Human Factors in AI-Assisted Imaging Review: Interface Cues, Blinding, and Reviewer Confidence",
+    "doc_type": "journal",
+    "category": "Human Factors",
+    "owner": "Demo Clinical AI Group",
+    "updated": "2026-08-14",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic human-factors study of interface design choices in blinded AI review.",
+    "tags": [
+      "human factors",
+      "journal",
+      "synthetic"
+    ]
+  },
+  {
+    "id": "JRN-008",
+    "file": "Robust Coordinate Validation for Medical Imaging Overlays.pdf",
+    "rel": "RedJournal/Robust Coordinate Validation for Medical Imaging Overlays.pdf",
+    "title": "Robust Coordinate Validation for Medical Imaging Overlays",
+    "doc_type": "journal",
+    "category": "Imaging Systems",
+    "owner": "Demo Imaging Platform",
+    "updated": "2026-09-03",
+    "status": "Published",
+    "year": 2026,
+    "description": "Synthetic engineering evaluation of coordinate-system checks for image-overlay alignment.",
+    "tags": [
+      "imaging systems",
+      "journal",
+      "synthetic"
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/pyrightconfig.json",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": ["./", "./api", "./rag"]
+    }
+  ]
+}
