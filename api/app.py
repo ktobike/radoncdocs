@@ -72,7 +72,6 @@ def _list_pdfs_under(root: Path) -> list[dict]:
             {
                 "id": meta.get("id") or p.stem,
                 "file": p.name,
-                "path": str(p),
                 "size": st.st_size,
                 "mtime": int(st.st_mtime),
                 "rel": rel,
@@ -139,7 +138,9 @@ async def docs_upload(files: List[UploadFile] = File(...), dest: str = Form("upl
         target.write_bytes(await upload.read())
         try:
             chunks, doc_type = index_pdf(target)
-            results.append({"file": str(target), "chunks_indexed": chunks, "doc_type": doc_type})
+            results.append(
+                {"rel": target.relative_to(DATA_DIR).as_posix(), "chunks_indexed": chunks, "doc_type": doc_type}
+            )
         except Exception as exc:
             target.unlink(missing_ok=True)
             raise HTTPException(status_code=500, detail=f"Indexing failed for {safe_name}: {exc}") from exc
@@ -173,7 +174,7 @@ def docs_delete(rel_path: str = Query(..., description="Path relative to the dat
     finally:
         abs_path.unlink(missing_ok=True)
 
-    return {"ok": True, "deleted": str(abs_path)}
+    return {"ok": True, "deleted": abs_path.relative_to(DATA_DIR).as_posix()}
 
 
 @app.post("/index/rebuild")

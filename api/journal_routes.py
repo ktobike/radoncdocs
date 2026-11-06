@@ -336,43 +336,38 @@ def _split_sections(text: str) -> Dict[str, str]:
     return sections
 
 def _resolve_pdf(path_or_name: str) -> Path | None:
-    """Resolve absolute path, repo-relative, or file name under data/raw."""
-    if not path_or_name:
+    """Resolve a journal PDF from a file name or path, refusing anything outside JOURNAL_ROOT.
+
+    Accepts a bare file name (what the UI sends), a path relative to JOURNAL_ROOT, or a
+    path that already points inside it. Every candidate is resolved (following symlinks
+    and ``..``) and must land on a PDF file inside JOURNAL_ROOT; otherwise returns None.
+    """
+    if not path_or_name or not JOURNAL_ROOT.is_dir():
+        return None
+    root = JOURNAL_ROOT.resolve()
+    requested = Path(path_or_name)
+
+    def _contained_pdf(candidate: Path) -> Path | None:
+        try:
+            resolved = candidate.resolve()
+        except (OSError, RuntimeError, ValueError):  # ValueError: embedded NUL byte
+            return None
+        if root in resolved.parents and resolved.suffix.lower() == ".pdf" and resolved.is_file():
+            return resolved
         return None
 
-    p = Path(path_or_name)
+    candidates = [requested] if requested.is_absolute() else [root / requested, requested]
+    for candidate in candidates:
+        found = _contained_pdf(candidate)
+        if found:
+            return found
 
-    # 1) absolute — restrict to RedJournal subtree only
-    if p.is_absolute() and p.exists() and p.suffix.lower() == ".pdf":
-        try:
-            # ensure it's inside JOURNAL_ROOT
-            if JOURNAL_ROOT.resolve() in p.resolve().parents:
-                return p
-        except Exception:
-            return None
-
-    # 2) repo-relative (already under data/raw or any subdir in the repo)
-    if p.exists() and p.suffix.lower() == ".pdf":
-        # only allow if it sits under RedJournal
-        try:
-            if JOURNAL_ROOT.resolve() in p.resolve().parents:
-                return p
-        except Exception:
-            pass
-
-    # 3) if it ALREADY starts with data/raw/RedJournal, don't prefix again
-    if str(p).startswith(str(JOURNAL_ROOT)) and p.suffix.lower() == ".pdf":
-        if p.exists():
-            return p
-
-    # 4) try under data/raw/RedJournal
-    under = (JOURNAL_ROOT / p).resolve()
-    if under.exists() and under.suffix.lower() == ".pdf":
-        return under
-
-    # 5) fallback: search by filename anywhere under RedJournal
-    matches = list(JOURNAL_ROOT.rglob(p.name)) if JOURNAL_ROOT.exists() else []
-    return matches[0] if matches else None
+    # Fall back to an exact file-name match anywhere under the journal folder. Compare names
+    # directly rather than passing user input to rglob(), which would treat it as a pattern.
+    for candidate in sorted(root.rglob("*.pdf")):
+        if candidate.name == requested.name:
+            return _contained_pdf(candidate)
+    return None
 
 _norm_ws = re.compile(r"\s+")
 def _norm(s: str) -> str:
@@ -1060,12 +1055,13 @@ class TLDRResponse(BaseModel):
 # ---- routes ----
 @router.get("/list")
 def journal_list():
-    return _list_pdfs()
+    # "path" is an absolute server path used internally (e.g. by the digest); don't expose it.
+    return [{k: v for k, v in item.items() if k != "path"} for item in _list_pdfs()]
 
 @router.get("/tldr")
 def journal_tldr(
     file: Optional[str] = Query(None, description="Exact file name from /journal/list"),
-    path: Optional[str] = Query(None, description="Full path from /journal/list"),
+    path: Optional[str] = Query(None, description="Path relative to the journal folder"),
     sentences: int = Query(5, ge=1, le=12),
     mode: str = Query("extractive")
 ):
