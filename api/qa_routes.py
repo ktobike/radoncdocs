@@ -194,17 +194,22 @@ def _query_focused_excerpt(text: str, question: str, max_sentences: int = 3) -> 
 
 
 
-def _source_url(hit: Dict) -> str | None:
-    if not SERVE_SOURCE_FILES:
-        return None
+def _rel_path(hit: Dict) -> str | None:
+    """Source path relative to the data directory; absolute server paths stay server-side."""
     raw = str(hit.get("source") or "")
     if not raw:
         return None
     try:
-        rel = Path(raw).resolve().relative_to(DATA_DIR.resolve())
-        return f"/files/{quote(str(rel).replace('\\', '/'), safe='/')}"
+        return Path(raw).resolve().relative_to(DATA_DIR.resolve()).as_posix()
     except Exception:
         return None
+
+
+def _source_url(hit: Dict) -> str | None:
+    if not SERVE_SOURCE_FILES:
+        return None
+    rel = _rel_path(hit)
+    return f"/files/{quote(rel, safe='/')}" if rel else None
 
 
 def _source_payload(hit: Dict, *, index: int | None = None, snippet: str | None = None) -> dict:
@@ -216,7 +221,7 @@ def _source_payload(hit: Dict, *, index: int | None = None, snippet: str | None 
         "page_from": hit.get("page_from"),
         "page_to": hit.get("page_to"),
         "score": float(hit.get("score") or 0),
-        "source": hit.get("source"),
+        "rel": _rel_path(hit),
         "snippet": _clean_answer_text(snippet if snippet is not None else (hit.get("text") or ""))[:520],
         "category": hit.get("category"),
         "owner": hit.get("owner"),
